@@ -3,6 +3,7 @@ import type { Status } from '../../../types/gradeStatus';
 import type GradeStatus from '../../../types/gradeStatus';
 import { load } from 'cheerio';
 import { titleCase } from 'title-case';
+import { zonedTimeToUtc } from 'date-fns-tz';
 
 function parseWebGrades(html: string): GradeStatus[] {
 	const start = performance.now();
@@ -64,7 +65,7 @@ function parseWebGrades(html: string): GradeStatus[] {
 						graded = Number($(this).text());
 						break;
 					case 7:
-						statusChangeDate = new Date($(this).text());
+						statusChangeDate = zonedTimeToUtc($(this).text(), 'America/Los_Angeles');
 						break;
 					case 8:
 						status = $(this).text() as Status;
