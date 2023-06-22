@@ -7,10 +7,10 @@
 @tailwind utilities;
 
 body {
-  @apply bg-slate-50;
+	@apply bg-slate-50;
 }
 
 ::selection {
-  background: #B4D5FF;
-  color: black;
+	background: #b4d5ff;
+	color: black;
 }

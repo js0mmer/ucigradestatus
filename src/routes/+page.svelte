@@ -6,22 +6,32 @@
 
 	let gradeStatuses: GradeStatus[] = [];
 
-	function fetchGradeStatuses() {
-		fetch('/api/query', {})
-			.then((res) => res.json())
+	let fail = false;
+
+	function fetchGradeStatuses(yearTerm: string) {
+		let searchParams = new URLSearchParams({ yearTerm });
+		fetch('/api/statuses?' + searchParams)
+			.then(async (res) => {
+				if (!res.ok) {
+					alert((await res.json()).message);
+					fail = true;
+					return null;
+				}
+
+				return res.json();
+			})
 			.then((res) => {
 				gradeStatuses = res.map((value: any) => {
 					value.statusChangeDate = new Date(value.statusChangeDate as string);
 					return value;
 				});
-			})
-			.catch((reason) => {
-				alert(reason);
+
+				fail = false;
 			});
 	}
 
 	onMount(() => {
-		fetchGradeStatuses();
+		fetchGradeStatuses('2023-14');
 	});
 
 	let course = '';
@@ -33,7 +43,7 @@
 	$: {
 		if (!course && !instructor) {
 			filteredGradeStatuses = gradeStatuses.slice(0, PAGE_SIZE);
-		} else {
+		} else if (gradeStatuses.length != 0) {
 			filteredGradeStatuses = gradeStatuses;
 
 			if (course) {
@@ -49,14 +59,7 @@
 				let instructorResults = search({ query: instructor, resultType: 'INSTRUCTOR' });
 
 				filteredGradeStatuses = filteredGradeStatuses.filter((value) => {
-					return value.instructors.some((instructor) => instructorResults[instructor]);
-					// if (value.instructors.includes(';')) {
-					// 	let instructors = value.instructor.toUpperCase().split('; ');
-
-					// 	return instructors.some(instructor => instructorResults[instructor]);
-					// } else {
-					// 	return instructorResults[value.instructor.toUpperCase()];
-					// }
+					return value.instructors.some((instructor) => instructorResults[instructor.toUpperCase()]);
 				});
 			}
 
@@ -71,7 +74,9 @@
 <nav class="flex p-2 bg-white border-b border-b-slate-200 drop-shadow-sm">
 	<div class="flex-1 flex justify-center ml-auto" />
 	<div class="mx-12">
-		<h1 class="tracking-[2px] text-center text-4xl font-semibold text-slate-700">UCI Grade Status</h1>
+		<h1 class="font-robotoSlab tracking-[2px] text-center text-4xl font-semibold text-slate-700">
+			UCI Grade Status
+		</h1>
 	</div>
 	<div class="flex-1 flex items-center ml-auto">
 		<a
@@ -115,8 +120,7 @@
 				<tr class="border-b p-2 border-b-slate-200">
 					<td class="border-r p-2 border-x-slate-200">
 						{String(entry.courseCode).padStart(5, '0')}
-						</td
-					>
+					</td>
 					<td class="border-x p-2 border-x-slate-200">{entry.dept}</td>
 					<td class="border-x p-2 border-x-slate-200">{entry.number}</td>
 					<td class="border-x p-2 border-x-slate-200">{entry.title}</td>
@@ -155,15 +159,11 @@
 			{/each}
 		</tbody>
 	</table>
-	{#if gradeStatuses.length == 0}
+	{#if fail}
+		<div class="flex w-full justify-center py-40 text-8xl">💀</div>
+	{:else if gradeStatuses.length == 0}
 		<div class="flex w-full justify-center p-20">
 			<Spinner size="10em" thickness="1em" accentColor="#34aeeb" />
 		</div>
 	{/if}
 </main>
-
-<style>
-	h1 {
-		font-family: 'Roboto Slab';
-	}
-</style>

@@ -5,7 +5,7 @@ export default {
 		extend: {},
 		fontFamily: {
 		  sans: ['Montserrat', 'sans-serif'],
-			h1: ['Roboto Slab']
+			robotoSlab: ['Roboto Slab']
 		}
 	},
 	plugins: []

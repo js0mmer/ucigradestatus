@@ -5,6 +5,7 @@ import { load } from 'cheerio';
 import { titleCase } from 'title-case';
 
 function parseWebGrades(html: string): GradeStatus[] {
+	const start = performance.now();
 	const $ = load(html);
 	const courses = $('.Courses');
 	const entries = courses.find('tr');
@@ -51,7 +52,6 @@ function parseWebGrades(html: string): GradeStatus[] {
 						$(this).html()?.toLowerCase().split('<br>').forEach(instructor => {
 							instructors.push(titleCase(instructor));
 						})
-						// instructor = titleCase($(this).html()?.toLowerCase().split().replace('<br>', ' 👍 ') as string).replace(' 👍 ', '; ');
 						break;
 					case 5:
 						enrolled = Number($(this).text());
@@ -84,12 +84,16 @@ function parseWebGrades(html: string): GradeStatus[] {
 		}
 	});
 
+	const end = performance.now();
+
+	console.log('Scrape time:', end-start);
+
 	return gradeStatuses;
 }
 
-function fetchWebGradesStatus(term: string, school: string): Promise<GradeStatus[] | null> {
+function fetchWebGradesStatus(yearTerm: string, school: string): Promise<GradeStatus[] | null> {
 	const body = new URLSearchParams({
-		YearTerm: term,
+		YearTerm: yearTerm,
 		School: school,
 		ShowSubscribed: '1',
 		ShowSubmitted: '1',
@@ -99,6 +103,7 @@ function fetchWebGradesStatus(term: string, school: string): Promise<GradeStatus
 		Submit: 'Show Classes'
 	});
 
+	const start = performance.now();
 	return fetch('https://www.reg.uci.edu/perl/WebGradesStatus', {
 		method: 'POST',
 		// cache: 'default',
@@ -109,6 +114,8 @@ function fetchWebGradesStatus(term: string, school: string): Promise<GradeStatus
 	})
 		.then((res) => res.text())
 		.then((text) => {
+			const end = performance.now();
+			console.log('Fetch time:', end-start)
 			const gradeStatuses = parseWebGrades(text);
 			return gradeStatuses;
 		})
@@ -117,8 +124,18 @@ function fetchWebGradesStatus(term: string, school: string): Promise<GradeStatus
 		});
 }
 
-export async function GET() {
-	const gradeStatuses = await fetchWebGradesStatus('2023-14', 'ANY');
+export async function GET({ url, setHeaders }) {
+	const yearTerm = url.searchParams.get('yearTerm');
+
+	if (!yearTerm) {
+		throw error(400, "Invalid request. Missing yearTerm param.");
+	}
+
+	const gradeStatuses = await fetchWebGradesStatus(yearTerm, 'ANY');
+
+	setHeaders({
+		"cache-control": "max-age=60"
+	});
 
 	if (gradeStatuses == null) {
 		throw error(500, 'Unable to fetch data from webgrades');
