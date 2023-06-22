@@ -75,14 +75,14 @@
 </svelte:head>
 <nav class="flex p-2 bg-white border-b border-b-slate-200 drop-shadow-sm">
 	<div class="flex-1 flex justify-center ml-auto" />
-	<div class="mx-12">
-		<h1 class="font-robotoSlab tracking-[2px] text-center text-4xl font-semibold text-slate-700">
+	<div>
+		<h1 class="font-robotoSlab tracking-[2px] text-center text-xl md:text-4xl font-semibold text-slate-700">
 			UCI Grade Status
 		</h1>
 	</div>
 	<div class="flex-1 flex items-center ml-auto">
 		<a
-			class="text-center text-slate-700 hover:text-blue-500 ml-auto mx-4"
+			class="text-center text-slate-700 hover:text-blue-500 ml-auto text-xs md:text-base md:mr-4"
 			href="https://www.reg.uci.edu/perl/WebGradesStatus"
 			target="_blank">WebGrades</a
 		>
@@ -91,81 +91,83 @@
 <main class="md:container md:mx-auto xl:px-48 py-4">
 	<input
 		bind:value={course}
-		class="border rounded-md border-slate-200 hover:border-slate-300 focus:border-blue-300 px-2 py-1 outline-none"
+		class="border rounded-md m-1 border-slate-200 hover:border-slate-300 focus:border-blue-300 px-2 py-1 outline-none"
 		type="text"
 		placeholder="Course"
 		id="course"
 	/>
 	<input
 		bind:value={instructor}
-		class="border rounded-md border-slate-200 hover:border-slate-300 focus:border-blue-300 px-2 py-1 outline-none"
+		class="border rounded-md m-1 border-slate-200 hover:border-slate-300 focus:border-blue-300 px-2 py-1 outline-none"
 		type="text"
 		placeholder="Instructor"
 		id="instructor"
 	/>
-	<table class="w-full mt-4">
-		<thead>
-			<tr class="border-b p-2 border-b-slate-200">
-				<th class="border-r p-2 border-x-slate-200">Course Code</th>
-				<th class="border-x p-2 border-x-slate-200">Dept</th>
-				<th class="border-x p-2 border-x-slate-200">Number</th>
-				<th class="border-x p-2 border-x-slate-200">Title</th>
-				<th class="border-x p-2 border-x-slate-200">Instructor</th>
-				<th class="border-x p-2 border-x-slate-200">Enrolled</th>
-				<th class="border-x p-2 border-x-slate-200">Graded</th>
-				<th class="border-x p-2 border-x-slate-200">Status Change Date</th>
-				<th class="border-l p-2 border-x-slate-200">Status</th>
-			</tr>
-		</thead>
-		<tbody>
-			{#each filteredGradeStatuses as entry}
+	<div class="overflow-x-auto">
+		<table class="w-full mt-4">
+			<thead>
 				<tr class="border-b p-2 border-b-slate-200">
-					<td class="border-r p-2 border-x-slate-200">
-						{String(entry.courseCode).padStart(5, '0')}
-					</td>
-					<td class="border-x p-2 border-x-slate-200">{entry.dept}</td>
-					<td class="border-x p-2 border-x-slate-200">{entry.number}</td>
-					<td class="border-x p-2 border-x-slate-200">{entry.title}</td>
-					<td class="border-x p-2 border-x-slate-200">
-						{#if entry.instructors.length == 1}
-							{entry.instructors[0]}
-						{:else}
-							{#each entry.instructors as instructor}
-								{instructor}<br />
-							{/each}
-						{/if}
-					</td>
-					<td class="border-x p-2 border-x-slate-200">{entry.enrolled}</td>
-					<td class="border-x p-2 border-x-slate-200">{entry.graded}</td>
-					<td class="border-x p-2 border-x-slate-200">
-						{entry.statusChangeDate.toLocaleString('en-us', {
-							weekday: 'short',
-							year: 'numeric',
-							month: 'short',
-							day: 'numeric',
-							hour: 'numeric',
-							minute: 'numeric'
-						})}
-					</td>
-					<td
-						class:text-green-400={entry.status == 'Submitted'}
-						class:text-yellow-400={entry.status == 'Tardy'}
-						class:text-red-400={entry.status == 'Unsubscribed' || entry.status == 'Error'}
-						class="border-l p-2 border-x-slate-200">{entry.status}</td
-					>
+					<th class="border-r p-2 border-x-slate-200">Course Code</th>
+					<th class="border-x p-2 border-x-slate-200">Dept</th>
+					<th class="border-x p-2 border-x-slate-200">Number</th>
+					<th class="border-x p-2 border-x-slate-200">Title</th>
+					<th class="border-x p-2 border-x-slate-200">Instructor</th>
+					<th class="border-x p-2 border-x-slate-200">Enrolled</th>
+					<th class="border-x p-2 border-x-slate-200">Graded</th>
+					<th class="border-x p-2 border-x-slate-200">Status Change Date</th>
+					<th class="border-l p-2 border-x-slate-200">Status</th>
 				</tr>
-			{:else}
-				{#if gradeStatuses.length != 0}
-					No Results Found
-				{/if}
-			{/each}
-		</tbody>
-	</table>
-	{#if fail}
-		<div class="flex w-full justify-center py-40 text-8xl">💀</div>
-	{:else if gradeStatuses.length == 0}
-		<div class="flex w-full justify-center p-20">
-			<Spinner size="10em" thickness="1em" accentColor="#34aeeb" />
-		</div>
-	{/if}
+			</thead>
+			<tbody>
+				{#each filteredGradeStatuses as entry}
+					<tr class="border-b p-2 border-b-slate-200">
+						<td class="border-r p-2 border-x-slate-200">
+							{String(entry.courseCode).padStart(5, '0')}
+						</td>
+						<td class="border-x p-2 border-x-slate-200">{entry.dept}</td>
+						<td class="border-x p-2 border-x-slate-200">{entry.number}</td>
+						<td class="border-x p-2 border-x-slate-200">{entry.title}</td>
+						<td class="border-x p-2 border-x-slate-200">
+							{#if entry.instructors.length == 1}
+								{entry.instructors[0]}
+							{:else}
+								{#each entry.instructors as instructor}
+									{instructor}<br />
+								{/each}
+							{/if}
+						</td>
+						<td class="border-x p-2 border-x-slate-200">{entry.enrolled}</td>
+						<td class="border-x p-2 border-x-slate-200">{entry.graded}</td>
+						<td class="border-x p-2 border-x-slate-200">
+							{entry.statusChangeDate.toLocaleString('en-us', {
+								weekday: 'short',
+								year: 'numeric',
+								month: 'short',
+								day: 'numeric',
+								hour: 'numeric',
+								minute: 'numeric'
+							})}
+						</td>
+						<td
+							class:text-green-400={entry.status == 'Submitted'}
+							class:text-yellow-400={entry.status == 'Tardy'}
+							class:text-red-400={entry.status == 'Unsubscribed' || entry.status == 'Error'}
+							class="border-l p-2 border-x-slate-200">{entry.status}</td
+						>
+					</tr>
+				{:else}
+					{#if gradeStatuses.length != 0}
+						No Results Found
+					{/if}
+				{/each}
+			</tbody>
+		</table>
+		{#if fail}
+			<div class="flex w-full justify-center py-40 text-8xl">💀</div>
+		{:else if gradeStatuses.length == 0}
+			<div class="flex w-full justify-center p-20">
+				<Spinner size="10em" thickness="1em" accentColor="#34aeeb" />
+			</div>
+		{/if}
+	</div>
 </main>
