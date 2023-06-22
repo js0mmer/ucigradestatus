@@ -59,7 +59,9 @@
 				let instructorResults = search({ query: instructor, resultType: 'INSTRUCTOR' });
 
 				filteredGradeStatuses = filteredGradeStatuses.filter((value) => {
-					return value.instructors.some((instructor) => instructorResults[instructor.toUpperCase()]);
+					return value.instructors.some(
+						(instructor) => instructorResults[instructor.toUpperCase()]
+					);
 				});
 			}
 

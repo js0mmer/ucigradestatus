@@ -49,9 +49,13 @@ function parseWebGrades(html: string): GradeStatus[] {
 						title = titleCase($(this).text().toLowerCase());
 						break;
 					case 4:
-						$(this).html()?.toLowerCase().split('<br>').forEach(instructor => {
-							instructors.push(titleCase(instructor));
-						})
+						$(this)
+							.html()
+							?.toLowerCase()
+							.split('<br>')
+							.forEach((instructor) => {
+								instructors.push(titleCase(instructor));
+							});
 						break;
 					case 5:
 						enrolled = Number($(this).text());
@@ -86,7 +90,7 @@ function parseWebGrades(html: string): GradeStatus[] {
 
 	const end = performance.now();
 
-	console.log('Scrape time:', end-start);
+	console.log('Scrape time:', end - start);
 
 	return gradeStatuses;
 }
@@ -115,7 +119,7 @@ function fetchWebGradesStatus(yearTerm: string, school: string): Promise<GradeSt
 		.then((res) => res.text())
 		.then((text) => {
 			const end = performance.now();
-			console.log('Fetch time:', end-start)
+			console.log('Fetch time:', end - start);
 			const gradeStatuses = parseWebGrades(text);
 			return gradeStatuses;
 		})
@@ -128,13 +132,13 @@ export async function GET({ url, setHeaders }) {
 	const yearTerm = url.searchParams.get('yearTerm');
 
 	if (!yearTerm) {
-		throw error(400, "Invalid request. Missing yearTerm param.");
+		throw error(400, 'Invalid request. Missing yearTerm param.');
 	}
 
 	const gradeStatuses = await fetchWebGradesStatus(yearTerm, 'ANY');
 
 	setHeaders({
-		"cache-control": "s-maxage=60"
+		'cache-control': 's-maxage=60'
 	});
 
 	if (gradeStatuses == null) {
