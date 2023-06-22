@@ -120,7 +120,7 @@
 			</thead>
 			<tbody>
 				{#each filteredGradeStatuses as entry}
-					<tr class="border-b p-2 border-b-slate-200">
+					<tr class="border-t p-2 border-t-slate-200">
 						<td class="border-r p-2 border-x-slate-200">
 							{String(entry.courseCode).padStart(5, '0')}
 						</td>
