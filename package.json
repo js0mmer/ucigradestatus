@@ -33,6 +33,7 @@
 	},
 	"type": "module",
 	"dependencies": {
+		"@vercel/analytics": "^1.0.1",
 		"cheerio": "^1.0.0-rc.12",
 		"fastest-levenshtein": "^1.0.16",
 		"title-case": "^3.0.3",
