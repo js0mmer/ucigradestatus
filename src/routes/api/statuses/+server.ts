@@ -134,7 +134,7 @@ export async function GET({ url, setHeaders }) {
 	const gradeStatuses = await fetchWebGradesStatus(yearTerm, 'ANY');
 
 	setHeaders({
-		"cache-control": "s-max-age=60"
+		"cache-control": "s-maxage=60"
 	});
 
 	if (gradeStatuses == null) {
