@@ -8,5 +8,6 @@ export default {
 			robotoSlab: ['Roboto Slab']
 		}
 	},
+	darkMode: 'class',
 	plugins: []
 };

@@ -6,11 +6,10 @@
 @tailwind components;
 @tailwind utilities;
 
-body {
-	@apply bg-slate-50;
+.dark {
+	color-scheme: dark;
 }
 
-::selection {
-	background: #b4d5ff;
-	color: black;
+body {
+	@apply bg-slate-50 dark:bg-neutral-900 selection:bg-[#b4d5ff] selection:text-black;
 }

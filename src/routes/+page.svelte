@@ -3,6 +3,27 @@
 	import { onMount } from 'svelte';
 	import search from 'websoc-fuzzy-search';
 	import Spinner from './spinner.svelte';
+	import { browser } from '$app/environment';
+
+	let darkMode = false;
+
+	if (browser) {
+		darkMode =
+			localStorage.theme === 'dark' ||
+			(!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches);
+	}
+
+	$: {
+		if (browser) {
+			if (darkMode) {
+				document.documentElement.classList.add('dark');
+				localStorage.setItem('theme', 'dark');
+			} else {
+				document.documentElement.classList.remove('dark');
+				localStorage.setItem('theme', 'light');
+			}
+		}
+	}
 
 	let gradeStatuses: GradeStatus[] = [];
 
@@ -73,32 +94,39 @@
 <svelte:head>
 	<title>UCI Grade Status</title>
 </svelte:head>
-<nav class="flex p-2 bg-white border-b border-b-slate-200 drop-shadow-sm">
+<nav
+	class="flex p-2 bg-white dark:bg-neutral-800 border-b dark:border-b-neutral-800 border-b-slate-200 drop-shadow-sm"
+>
 	<div class="flex-1 flex justify-center ml-auto" />
 	<div>
-		<h1 class="font-robotoSlab tracking-[2px] text-center text-xl md:text-4xl font-semibold text-slate-700">
+		<h1
+			class="font-robotoSlab tracking-[2px] text-center text-xl md:text-4xl font-semibold text-slate-700 dark:text-slate-100"
+		>
 			UCI Grade Status
 		</h1>
 	</div>
 	<div class="flex-1 flex items-center ml-auto">
-		<a
-			class="text-center text-slate-700 hover:text-blue-500 ml-auto text-xs md:text-base md:mr-4"
-			href="https://www.reg.uci.edu/perl/WebGradesStatus"
-			target="_blank">WebGrades</a
-		>
+		<div class="ml-auto md:mr-4 text-xs md:text-base">
+			<button class="mr-2" on:click={() => (darkMode = !darkMode)}>{darkMode ? '🌙' : '☀️'}</button>
+			<a
+				class="text-center text-slate-700 dark:text-slate-100 hover:text-blue-500 dark:hover:text-blue-500 text-xs md:text-base transition-colors duration-300"
+				href="https://www.reg.uci.edu/perl/WebGradesStatus"
+				target="_blank">WebGrades</a
+			>
+		</div>
 	</div>
 </nav>
 <main class="md:container md:mx-auto xl:px-48 py-4">
 	<input
 		bind:value={course}
-		class="border rounded-md m-1 border-slate-200 hover:border-slate-300 focus:border-blue-300 px-2 py-1 outline-none"
+		class="dark:bg-neutral-900 dark:text-slate-100 dark:placeholder-slate-100 border rounded-md m-1 border-slate-200 hover:border-slate-300 focus:border-blue-300 px-2 py-1 outline-none"
 		type="text"
 		placeholder="Course"
 		id="course"
 	/>
 	<input
 		bind:value={instructor}
-		class="border rounded-md m-1 border-slate-200 hover:border-slate-300 focus:border-blue-300 px-2 py-1 outline-none"
+		class="dark:bg-neutral-900 dark:text-slate-100 dark:placeholder-slate-100 border rounded-md m-1 border-slate-200 hover:border-slate-300 focus:border-blue-300 px-2 py-1 outline-none"
 		type="text"
 		placeholder="Instructor"
 		id="instructor"
