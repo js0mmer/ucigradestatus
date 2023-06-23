@@ -1,6 +1,6 @@
 import { error, json } from '@sveltejs/kit';
-import type { Status } from '../../../types/gradeStatus';
-import type GradeStatus from '../../../types/gradeStatus';
+import type { Status } from '../../../util/types';
+import type GradeStatus from '../../../util/types';
 import { load } from 'cheerio';
 import { titleCase } from 'title-case';
 import { zonedTimeToUtc } from 'date-fns-tz';
