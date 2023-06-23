@@ -17,28 +17,28 @@
 
 <table class="w-full mt-4">
 	<thead>
-		<tr class="border-b p-2 border-b-slate-200">
-			<th class="border-r p-2 border-x-slate-200">Course Code</th>
-			<th class="border-x p-2 border-x-slate-200">Dept</th>
-			<th class="border-x p-2 border-x-slate-200">Number</th>
-			<th class="border-x p-2 border-x-slate-200">Title</th>
-			<th class="border-x p-2 border-x-slate-200">Instructor</th>
-			<th class="border-x p-2 border-x-slate-200">Enr</th>
-			<th class="border-x p-2 border-x-slate-200">Grd</th>
-			<th class="border-x p-2 border-x-slate-200">Status Change Date</th>
-			<th class="border-l p-2 border-x-slate-200">Status</th>
+		<tr class="border-b p-2 border-b-slate-200 dark:border-b-neutral-600">
+			<th class="border-r p-2 border-x-slate-200 dark:border-x-neutral-600">Course Code</th>
+			<th class="border-x p-2 border-x-slate-200 dark:border-x-neutral-600">Dept</th>
+			<th class="border-x p-2 border-x-slate-200 dark:border-x-neutral-600">Number</th>
+			<th class="border-x p-2 border-x-slate-200 dark:border-x-neutral-600">Title</th>
+			<th class="border-x p-2 border-x-slate-200 dark:border-x-neutral-600">Instructor</th>
+			<th class="border-x p-2 border-x-slate-200 dark:border-x-neutral-600">Enr</th>
+			<th class="border-x p-2 border-x-slate-200 dark:border-x-neutral-600">Grd</th>
+			<th class="border-x p-2 border-x-slate-200 dark:border-x-neutral-600">Status Change Date</th>
+			<th class="border-l p-2 border-x-slate-200 dark:border-x-neutral-600">Status</th>
 		</tr>
 	</thead>
 	<tbody>
 		{#each gradeStatuses as entry}
-			<tr class="border-t p-2 border-t-slate-200">
-				<td class="border-r p-2 border-x-slate-200">
+			<tr class="border-t p-2 border-t-slate-200 dark:border-t-neutral-600">
+				<td class="border-r p-2 border-x-slate-200 dark:border-x-neutral-600">
 					{String(entry.courseCode).padStart(5, '0')}
 				</td>
-				<td class="border-x p-2 border-x-slate-200">{entry.dept}</td>
-				<td class="border-x p-2 border-x-slate-200">{entry.number}</td>
-				<td class="border-x p-2 border-x-slate-200">{entry.title}</td>
-				<td class="border-x p-2 border-x-slate-200">
+				<td class="border-x p-2 border-x-slate-200 dark:border-x-neutral-600">{entry.dept}</td>
+				<td class="border-x p-2 border-x-slate-200 dark:border-x-neutral-600">{entry.number}</td>
+				<td class="border-x p-2 border-x-slate-200 dark:border-x-neutral-600">{entry.title}</td>
+				<td class="border-x p-2 border-x-slate-200 dark:border-x-neutral-600">
 					{#if entry.instructors.length == 1}
 						{entry.instructors[0]}
 					{:else}
@@ -47,9 +47,9 @@
 						{/each}
 					{/if}
 				</td>
-				<td class="border-x p-2 border-x-slate-200">{entry.enrolled}</td>
-				<td class="border-x p-2 border-x-slate-200">{entry.graded}</td>
-				<td class="border-x p-2 border-x-slate-200">
+				<td class="border-x p-2 border-x-slate-200 dark:border-x-neutral-600">{entry.enrolled}</td>
+				<td class="border-x p-2 border-x-slate-200 dark:border-x-neutral-600">{entry.graded}</td>
+				<td class="border-x p-2 border-x-slate-200 dark:border-x-neutral-600">
 					{entry.statusChangeDate.toLocaleString('en-us', {
 						weekday: 'short',
 						year: 'numeric',
@@ -63,7 +63,7 @@
 					class:text-green-400={entry.status == 'Submitted'}
 					class:text-yellow-400={entry.status == 'Tardy'}
 					class:text-red-400={entry.status == 'Unsubscribed' || entry.status == 'Error'}
-					class="border-l p-2 border-x-slate-200">{entry.status}</td
+					class="border-l p-2 border-x-slate-200 dark:border-x-neutral-600">{entry.status}</td
 				>
 			</tr>
 		{:else}

@@ -70,14 +70,14 @@
 
 <input
 	bind:value={course}
-	class="dark:bg-neutral-900 dark:text-slate-100 dark:placeholder-slate-100 border rounded-md m-1 border-slate-200 hover:border-slate-300 focus:border-blue-300 px-2 py-1 outline-none"
+	class="dark:bg-neutral-900 dark:text-slate-100 dark:placeholder-neutral-100 border rounded-md m-1 border-slate-200 dark:border-neutral-600 hover:border-slate-300 dark:hover:border-neutral-500 focus:border-blue-300 dark:focus:border-blue-300  px-2 py-1 outline-none"
 	type="text"
 	placeholder="Course"
 	id="course"
 />
 <input
 	bind:value={instructor}
-	class="dark:bg-neutral-900 dark:text-slate-100 dark:placeholder-slate-100 border rounded-md m-1 border-slate-200 hover:border-slate-300 focus:border-blue-300 px-2 py-1 outline-none"
+	class="dark:bg-neutral-900 dark:text-slate-100 dark:placeholder-neutral-100 border rounded-md m-1 border-slate-200 dark:border-neutral-600 hover:border-slate-300 dark:hover:border-neutral-500 focus:border-blue-300 dark:focus:border-blue-300  px-2 py-1 outline-none"
 	type="text"
 	placeholder="Instructor"
 	id="instructor"
