@@ -37,7 +37,6 @@
 		"cheerio": "^1.0.0-rc.12",
 		"date-fns": "^2.30.0",
 		"date-fns-tz": "^2.0.0",
-		"fastest-levenshtein": "^1.0.16",
 		"title-case": "^3.0.3",
 		"websoc-fuzzy-search": "^0.10.0"
 	}
