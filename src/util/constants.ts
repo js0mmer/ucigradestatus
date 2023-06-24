@@ -1,9 +1,9 @@
 export const PAGE_SIZE = 30;
 export const WEBGRADES_URL = 'https://www.reg.uci.edu/perl/WebGradesStatus';
 /**
- * 1 minute
+ * 5 minutes
  */
-export const STATUS_MAX_AGE = 60;
+export const STATUS_MAX_AGE = 300;
 /**
  * 1 day
  */
