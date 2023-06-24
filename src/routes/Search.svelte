@@ -1,5 +1,5 @@
 <script lang="ts">
-	import search from 'websoc-fuzzy-search';
+	import search, { type SearchResult } from 'websoc-fuzzy-search';
 	import { error, loading, results } from '../util/stores';
 	import { PAGE_SIZE } from '../util/constants';
 	import type { GradeStatus, YearTerm, YearTermsResponse } from '../util/types';
@@ -12,27 +12,29 @@
 	let yearTerms: YearTerm[] = [];
 	let yearTerm: string;
 
+	let courseSearchResults: Record<string, SearchResult>;
+	let instructorSearchResults: Record<string, SearchResult>;
+
+	$: courseSearchResults = search({ query: course, resultType: 'COURSE' });
+	$: instructorSearchResults = search({ query: instructor, resultType: 'INSTRUCTOR' });
+
 	$: {
-		if (!course && !instructor) {
+		if (!courseSearchResults && !instructorSearchResults) {
 			results.set(gradeStatuses.slice(0, PAGE_SIZE));
 		} else if (gradeStatuses.length != 0) {
 			let filteredGradeStatuses = gradeStatuses;
 
-			if (course) {
-				let courseResults = search({ query: course, resultType: 'COURSE' });
-
+			if (courseSearchResults) {
 				filteredGradeStatuses = filteredGradeStatuses.filter((value) => {
 					let courseName = value.dept.toUpperCase().replace(' ', '') + value.number.toUpperCase();
-					return courseResults[courseName];
+					return courseSearchResults[courseName];
 				});
 			}
 
-			if (instructor) {
-				let instructorResults = search({ query: instructor, resultType: 'INSTRUCTOR' });
-
+			if (instructorSearchResults) {
 				filteredGradeStatuses = filteredGradeStatuses.filter((value) => {
 					return value.instructors.some(
-						(instructor) => instructorResults[instructor.toUpperCase()]
+						(instructor) => instructorSearchResults[instructor.toUpperCase()]
 					);
 				});
 			}
