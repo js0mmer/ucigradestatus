@@ -88,7 +88,6 @@
 
 	$: {
 		if (yearTerm) {
-			console.log(yearTerm);
 			loading.set(true);
 			results.set([]);
 			fetchGradeStatuses(yearTerm);
