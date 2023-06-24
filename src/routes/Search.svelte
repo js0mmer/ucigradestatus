@@ -2,7 +2,7 @@
 	import search from 'websoc-fuzzy-search';
 	import { error, loading, results } from '../util/stores';
 	import { PAGE_SIZE } from '../util/constants';
-	import type { GradeStatus, YearTerm, YearTermResponse } from '../util/types';
+	import type { GradeStatus, YearTerm, YearTermsResponse } from '../util/types';
 	import { onMount } from 'svelte';
 
 	let course = '';
@@ -66,7 +66,7 @@
 	}
 
 	function fetchYearTerms() {
-		fetch('/api/yearterm')
+		fetch('/api/yearterms')
 			.then(async (res) => {
 				if (!res.ok) {
 					throw new Error((await res.json()).message ?? res.statusText);
@@ -74,7 +74,7 @@
 
 				return res.json();
 			})
-			.then((json: YearTermResponse) => {
+			.then((json: YearTermsResponse) => {
 				yearTerms = json.yearTerms;
 				yearTerm = json.defaultTerm;
 			})
@@ -88,6 +88,7 @@
 		if (yearTerm) {
 			console.log(yearTerm);
 			loading.set(true);
+			results.set([]);
 			fetchGradeStatuses(yearTerm);
 		}
 	}

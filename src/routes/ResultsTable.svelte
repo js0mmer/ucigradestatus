@@ -1,9 +1,7 @@
 <script lang="ts">
-	import { writable } from 'svelte/store';
 	import Spinner from './Spinner.svelte';
 	import type { GradeStatus } from '../util/types';
 	import { error, loading, results } from '../util/stores';
-
 
 	let loadingValue = true;
 	loading.subscribe((value) => (loadingValue = value));
@@ -47,7 +45,8 @@
 						{/each}
 					{/if}
 				</td>
-				<td class="border-x p-2 border-x-slate-200 dark:border-x-neutral-600">{entry.enrolled}</td>
+				<td class="border-x p-2 border-x-slate-200 dark:border-x-neutral-600">{entry.enrolled}</td
+				>
 				<td class="border-x p-2 border-x-slate-200 dark:border-x-neutral-600">{entry.graded}</td>
 				<td class="border-x p-2 border-x-slate-200 dark:border-x-neutral-600">
 					{entry.statusChangeDate.toLocaleString('en-us', {
@@ -60,8 +59,10 @@
 					})}
 				</td>
 				<td
-					class:text-green-400={entry.status == 'Submitted'}
-					class:text-yellow-400={entry.status == 'Tardy'}
+					class:text-green-500={entry.status == 'Submitted'}
+					class:text-yellow-500={entry.status == 'Tardy'}
+					class:dark:text-green-400={entry.status == 'Submitted'}
+					class:dark:text-yellow-400={entry.status == 'Tardy'}
 					class:text-red-400={entry.status == 'Unsubscribed' || entry.status == 'Error'}
 					class="border-l p-2 border-x-slate-200 dark:border-x-neutral-600">{entry.status}</td
 				>

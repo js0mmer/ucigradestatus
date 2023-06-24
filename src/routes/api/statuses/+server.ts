@@ -4,6 +4,7 @@ import type { GradeStatus } from '../../../util/types';
 import { load } from 'cheerio';
 import { titleCase } from 'title-case';
 import { zonedTimeToUtc } from 'date-fns-tz';
+import { OLD_STATUS_MAX_AGE, STATUS_MAX_AGE, WEBGRADES_URL } from '../../../util/constants';
 
 function parseWebGrades(html: string): GradeStatus[] {
 	const start = performance.now();
@@ -109,13 +110,12 @@ function fetchWebGradesStatus(yearTerm: string, school: string): Promise<GradeSt
 	});
 
 	const start = performance.now();
-	return fetch('https://www.reg.uci.edu/perl/WebGradesStatus', {
+	return fetch(WEBGRADES_URL, {
 		method: 'POST',
-		// cache: 'default',
 		headers: {
 			'Content-Type': 'application/x-www-form-urlencoded'
 		},
-		body: body.toString()
+		body
 	})
 		.then(async (res) => {
 			if (!res.ok) {
@@ -136,6 +136,19 @@ function fetchWebGradesStatus(yearTerm: string, school: string): Promise<GradeSt
 		});
 }
 
+/**
+ * currently returns true if yearTerm requested is from a previous calendar year
+ * @param yearTerm
+ * @returns true or false
+ */
+function shouldCacheLong(yearTerm: string) {
+	const year = Number(yearTerm.split('-')[0]);
+
+	const date = new Date();
+
+	return date.getFullYear() > year;
+}
+
 export async function GET({ url, setHeaders }) {
 	const yearTerm = url.searchParams.get('yearTerm');
 
@@ -145,13 +158,15 @@ export async function GET({ url, setHeaders }) {
 
 	const gradeStatuses = await fetchWebGradesStatus(yearTerm, 'ANY');
 
-	setHeaders({
-		'cache-control': 's-maxage=60'
-	});
-
 	if (gradeStatuses == null) {
 		throw error(500, 'Unable to fetch data from WebGrades');
 	}
+
+	setHeaders({
+		'cache-control': shouldCacheLong(yearTerm)
+			? `s-maxage=${OLD_STATUS_MAX_AGE}, max-age=${OLD_STATUS_MAX_AGE}`
+			: `s-maxage=${STATUS_MAX_AGE}, max-age=${STATUS_MAX_AGE}`
+	});
 
 	return json(gradeStatuses);
 }

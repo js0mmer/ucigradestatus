@@ -1,9 +1,9 @@
 import { error, json } from '@sveltejs/kit';
-import { WEBGRADES_URL } from '../../../util/constants';
+import { WEBGRADES_URL, YEARTERMS_MAX_AGE } from '../../../util/constants';
 import { load } from 'cheerio';
-import type { YearTerm, YearTermResponse } from '../../../util/types';
+import type { YearTerm, YearTermsResponse } from '../../../util/types';
 
-function parseYearTerms(html: string): YearTermResponse {
+function parseYearTerms(html: string): YearTermsResponse {
 	const $ = load(html);
 	const yearTermSelect = $('[name=YearTerm]');
 	const yearTerms: YearTerm[] = [];
@@ -25,8 +25,8 @@ function parseYearTerms(html: string): YearTermResponse {
 	return { defaultTerm, yearTerms };
 }
 
-export async function GET() {
-	const yearTerms = await fetch(WEBGRADES_URL)
+function fetchYearTerms() {
+	return fetch(WEBGRADES_URL)
 		.then(async (res) => {
 			if (!res.ok) {
 				throw new Error(await res.text());
@@ -41,10 +41,18 @@ export async function GET() {
 			console.log(error);
 			return null;
 		});
+}
+
+export async function GET({ setHeaders }) {
+	const yearTerms = await fetchYearTerms();
 
 	if (!yearTerms) {
-		throw error(500, 'Unable to fetch YearTerms options from WebGrades');
+		throw error(500, 'Unable to fetch YearTerm options from WebGrades');
 	}
+
+	setHeaders({
+		'cache-control': `s-maxage=${YEARTERMS_MAX_AGE}, max-age=${YEARTERMS_MAX_AGE}`
+	});
 
 	return json(yearTerms);
 }
