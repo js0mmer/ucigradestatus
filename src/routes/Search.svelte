@@ -19,19 +19,19 @@
 	$: instructorSearchResults = search({ query: instructor, resultType: 'INSTRUCTOR' });
 
 	$: {
-		if (!courseSearchResults && !instructorSearchResults) {
+		if (!course && !instructor) {
 			results.set(gradeStatuses.slice(0, PAGE_SIZE));
 		} else if (gradeStatuses.length != 0) {
 			let filteredGradeStatuses = gradeStatuses;
 
-			if (courseSearchResults) {
+			if (course) {
 				filteredGradeStatuses = filteredGradeStatuses.filter((value) => {
 					let courseName = value.dept.toUpperCase().replace(' ', '') + value.number.toUpperCase();
 					return courseSearchResults[courseName];
 				});
 			}
 
-			if (instructorSearchResults) {
+			if (instructor) {
 				filteredGradeStatuses = filteredGradeStatuses.filter((value) => {
 					return value.instructors.some(
 						(instructor) => instructorSearchResults[instructor.toUpperCase()]
