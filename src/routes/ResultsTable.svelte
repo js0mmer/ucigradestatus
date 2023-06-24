@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { writable } from 'svelte/store';
 	import Spinner from './Spinner.svelte';
-	import type GradeStatus from '../util/types';
+	import type { GradeStatus } from '../util/types';
 	import { error, loading, results } from '../util/stores';
 
 

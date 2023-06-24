@@ -1,6 +1,6 @@
 import { error, json } from '@sveltejs/kit';
 import type { Status } from '../../../util/types';
-import type GradeStatus from '../../../util/types';
+import type { GradeStatus } from '../../../util/types';
 import { load } from 'cheerio';
 import { titleCase } from 'title-case';
 import { zonedTimeToUtc } from 'date-fns-tz';
@@ -117,14 +117,21 @@ function fetchWebGradesStatus(yearTerm: string, school: string): Promise<GradeSt
 		},
 		body: body.toString()
 	})
-		.then((res) => res.text())
+		.then(async (res) => {
+			if (!res.ok) {
+				throw new Error(await res.text());
+			}
+
+			return res.text();
+		})
 		.then((text) => {
 			const end = performance.now();
 			console.log('Fetch time:', end - start);
 			const gradeStatuses = parseWebGrades(text);
 			return gradeStatuses;
 		})
-		.catch(() => {
+		.catch((error) => {
+			console.log(error);
 			return null;
 		});
 }
@@ -143,7 +150,7 @@ export async function GET({ url, setHeaders }) {
 	});
 
 	if (gradeStatuses == null) {
-		throw error(500, 'Unable to fetch data from webgrades');
+		throw error(500, 'Unable to fetch data from WebGrades');
 	}
 
 	return json(gradeStatuses);

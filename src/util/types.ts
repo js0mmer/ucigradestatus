@@ -1,6 +1,6 @@
 export type Status = 'Submitted' | 'Subscribed' | 'Unsubscribed' | 'Error' | 'Tardy';
 
-interface GradeStatus {
+export interface GradeStatus {
 	courseCode: number;
 	dept: string;
 	number: string;
@@ -12,4 +12,12 @@ interface GradeStatus {
 	status: Status;
 }
 
-export default GradeStatus;
+export interface YearTerm {
+	value: string;
+	name: string;
+}
+
+export interface YearTermResponse {
+	defaultTerm: string,
+	yearTerms: YearTerm[]
+}
