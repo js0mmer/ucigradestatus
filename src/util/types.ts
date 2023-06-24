@@ -18,6 +18,6 @@ export interface YearTerm {
 }
 
 export interface YearTermsResponse {
-	defaultTerm: string,
-	yearTerms: YearTerm[]
+	defaultTerm: string;
+	yearTerms: YearTerm[];
 }

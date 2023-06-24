@@ -45,8 +45,7 @@
 						{/each}
 					{/if}
 				</td>
-				<td class="border-x p-2 border-x-slate-200 dark:border-x-neutral-600">{entry.enrolled}</td
-				>
+				<td class="border-x p-2 border-x-slate-200 dark:border-x-neutral-600">{entry.enrolled}</td>
 				<td class="border-x p-2 border-x-slate-200 dark:border-x-neutral-600">{entry.graded}</td>
 				<td class="border-x p-2 border-x-slate-200 dark:border-x-neutral-600">
 					{entry.statusChangeDate.toLocaleString('en-us', {

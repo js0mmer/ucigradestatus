@@ -114,7 +114,10 @@
 	placeholder="Instructor"
 	id="instructor"
 />
-<select class="dark:bg-neutral-900 dark:text-slate-100 dark:placeholder-neutral-100 border rounded-md m-1 border-slate-200 dark:border-neutral-600 hover:border-slate-300 dark:hover:border-neutral-500 focus:border-blue-300 dark:focus:border-blue-300 px-2 py-[0.3rem] outline-none" bind:value={yearTerm}>
+<select
+	class="dark:bg-neutral-900 dark:text-slate-100 dark:placeholder-neutral-100 border rounded-md m-1 border-slate-200 dark:border-neutral-600 hover:border-slate-300 dark:hover:border-neutral-500 focus:border-blue-300 dark:focus:border-blue-300 px-2 py-[0.3rem] outline-none"
+	bind:value={yearTerm}
+>
 	{#each yearTerms as option}
 		<option value={option.value}>{option.name}</option>
 	{/each}
