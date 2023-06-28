@@ -13,7 +13,7 @@
 	error.subscribe((value) => (errorValue = value));
 </script>
 
-<table class="w-full mt-4">
+<table class="w-full mt-2">
 	<thead>
 		<tr class="border-b p-2 border-b-slate-200 dark:border-b-neutral-600">
 			<th class="border-r p-2 border-x-slate-200 dark:border-x-neutral-600">Course Code</th>
