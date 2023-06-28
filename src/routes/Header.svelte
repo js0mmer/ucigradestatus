@@ -35,7 +35,9 @@
 	</div>
 	<div class="flex-1 flex items-center ml-auto">
 		<div class="ml-auto md:mr-4 text-xs md:text-base">
-			<button class="md:mr-2" on:click={() => (darkMode = !darkMode)}>{darkMode ? '🌙' : '☀️'}</button>
+			<button class="md:mr-2" on:click={() => (darkMode = !darkMode)}>
+				{darkMode ? '🌙' : '☀️'}
+			</button>
 			<a
 				class="text-center text-slate-700 dark:text-slate-100 hover:text-blue-500 dark:hover:text-blue-500 text-xs md:text-base transition-colors duration-300"
 				href="https://www.reg.uci.edu/perl/WebGradesStatus"

@@ -30,7 +30,8 @@ function parseWebGrades(html: string): GradeStatus[] {
 
 		const cols = $(this).find('td');
 
-		if (cols.length == 0) { // header row
+		if (cols.length == 0) {
+			// header row
 			hasGradesCol = $(this).find('th').length == NUM_COLS_WITH_GRD;
 		} else if (cols.length != 0) {
 			let isEmpty = false;
