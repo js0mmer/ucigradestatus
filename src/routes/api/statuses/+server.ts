@@ -6,12 +6,17 @@ import { titleCase } from 'title-case';
 import { zonedTimeToUtc } from 'date-fns-tz';
 import { OLD_STATUS_MAX_AGE, STATUS_MAX_AGE, WEBGRADES_URL } from '../../../util/constants';
 
+const NUM_COLS_WITH_GRD = 9;
+
 function parseWebGrades(html: string): GradeStatus[] {
 	const start = performance.now();
 	const $ = load(html);
 	const courses = $('.Courses');
 	const entries = courses.find('tr');
 	const gradeStatuses: GradeStatus[] = [];
+
+	let hasGradesCol = true;
+
 	entries.each(function () {
 		let courseCode = 0,
 			dept = '',
@@ -26,8 +31,9 @@ function parseWebGrades(html: string): GradeStatus[] {
 
 		const cols = $(this).find('td');
 
-		if (cols.length != 0) {
-			// ignore header rows
+		if (cols.length == 0) { // header row
+			hasGradesCol = $(this).find('th').length == NUM_COLS_WITH_GRD;
+		} else if (cols.length != 0) {
 			let isEmpty = false;
 
 			cols.each(function (i) {
@@ -62,13 +68,13 @@ function parseWebGrades(html: string): GradeStatus[] {
 					case 5:
 						enrolled = Number($(this).text());
 						break;
-					case 6:
+					case hasGradesCol ? 6 : -1:
 						graded = Number($(this).text());
 						break;
-					case 7:
+					case hasGradesCol ? 7 : 6:
 						statusChangeDate = zonedTimeToUtc($(this).text(), 'America/Los_Angeles');
 						break;
-					case 8:
+					case hasGradesCol ? 8 : 7:
 						status = $(this).text() as Status;
 						break;
 				}
