@@ -23,7 +23,7 @@
 </script>
 
 <nav
-	class="flex p-2 bg-white dark:bg-neutral-800 border-b dark:border-b-neutral-800 border-b-slate-200 drop-shadow-sm"
+	class="flex p-2 bg-white dark:bg-neutral-800 border-b dark:border-b-neutral-900 border-b-slate-200 drop-shadow-sm"
 >
 	<div class="flex-1 flex justify-center ml-auto" />
 	<div>
