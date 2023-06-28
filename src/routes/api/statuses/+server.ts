@@ -2,7 +2,6 @@ import { error, json } from '@sveltejs/kit';
 import type { Status } from '../../../util/types';
 import type { GradeStatus } from '../../../util/types';
 import { load } from 'cheerio';
-import { titleCase } from 'title-case';
 import { zonedTimeToUtc } from 'date-fns-tz';
 import { OLD_STATUS_MAX_AGE, STATUS_MAX_AGE, WEBGRADES_URL } from '../../../util/constants';
 
@@ -54,15 +53,14 @@ function parseWebGrades(html: string): GradeStatus[] {
 						number = $(this).text();
 						break;
 					case 3:
-						title = titleCase($(this).text().toLowerCase());
+						title = $(this).text();
 						break;
 					case 4:
 						$(this)
 							.html()
-							?.toLowerCase()
-							.split('<br>')
+							?.split('<br>')
 							.forEach((instructor) => {
-								instructors.push(titleCase(instructor));
+								instructors.push(instructor);
 							});
 						break;
 					case 5:
