@@ -1,7 +1,6 @@
 <script lang="ts">
 	import search, { type SearchResult } from 'websoc-fuzzy-search';
 	import { error, loading, results } from '../util/stores';
-	import { PAGE_SIZE } from '../util/constants';
 	import type { GradeStatus, YearTerm, YearTermsResponse } from '../util/types';
 	import { onMount } from 'svelte';
 
@@ -41,7 +40,7 @@
 	$: {
 		let filteredGradeStatuses = gradeStatuses.filter((value) => isCheckedStatus(value));
 		if (!course && !instructor) {
-			results.set(filteredGradeStatuses.slice(0, PAGE_SIZE));
+			results.set(filteredGradeStatuses);
 		} else if (gradeStatuses.length != 0) {
 			if (course) {
 				filteredGradeStatuses = filteredGradeStatuses.filter((value) => {
@@ -58,7 +57,7 @@
 				});
 			}
 
-			results.set(filteredGradeStatuses.slice(0, PAGE_SIZE));
+			results.set(filteredGradeStatuses);
 		}
 	}
 

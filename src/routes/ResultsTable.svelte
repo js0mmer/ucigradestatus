@@ -2,16 +2,35 @@
 	import Spinner from './Spinner.svelte';
 	import type { GradeStatus } from '../util/types';
 	import { error, loading, results } from '../util/stores';
+	import { PAGE_SIZE } from '../util/constants';
+
+	let resultsStart = 0;
+	let resultsEnd = PAGE_SIZE;
 
 	let loadingValue = true;
 	loading.subscribe((value) => (loadingValue = value));
 
 	let gradeStatuses: GradeStatus[] = [];
-	results.subscribe((value) => (gradeStatuses = value));
+	results.subscribe((value) => {
+		gradeStatuses = value;
+		resultsEnd = PAGE_SIZE;
+	});
 
 	let errorValue = false;
 	error.subscribe((value) => (errorValue = value));
+
+	function handleScroll() {
+		if (
+			resultsEnd < gradeStatuses.length &&
+			document.documentElement.scrollTop + window.innerHeight * 1.25 >
+				document.documentElement.scrollHeight
+		) {
+			resultsEnd += PAGE_SIZE;
+		}
+	}
 </script>
+
+<svelte:window on:scroll={handleScroll} />
 
 <table class="w-full mt-2">
 	<thead>
@@ -28,7 +47,7 @@
 		</tr>
 	</thead>
 	<tbody>
-		{#each gradeStatuses as entry}
+		{#each gradeStatuses.slice(resultsStart, resultsEnd) as entry}
 			<tr class="border-t p-2 border-t-slate-200 dark:border-t-neutral-600">
 				<td class="border-r p-2 border-x-slate-200 dark:border-x-neutral-600">
 					{String(entry.courseCode).padStart(5, '0')}
@@ -79,4 +98,12 @@
 	<div class="flex w-full justify-center p-20">
 		<Spinner size="10em" thickness="1em" accentColor="#34aeeb" />
 	</div>
+{:else if gradeStatuses.length > PAGE_SIZE}
+	<!-- <div class="flex w-full justify-center mt-2">
+		<div>
+			{#each { length: numPages } as _, i}
+			<button class="p-2 w-10 dark:bg-neutral-800 bg-white border dark:border-neutral-900 border-slate-200 ">{i + 1}</button>
+			{/each}
+		</div>
+	</div> -->
 {/if}
